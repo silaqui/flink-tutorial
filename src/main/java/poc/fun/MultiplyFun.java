@@ -1,4 +1,4 @@
-package poc;
+package poc.fun;
 
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
