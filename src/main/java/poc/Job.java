@@ -22,7 +22,6 @@ public class Job {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        env.enableCheckpointing(5000L);
 
         DataStreamSource<DataModel> dataSource = env.addSource(new DataSource());
         DataStreamSource<CountModel> countSource = env.addSource(new CountSource());
