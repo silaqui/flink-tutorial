@@ -5,15 +5,13 @@ import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.runtime.state.CheckpointListener;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
-import poc.model.CountedDataModel;
 import poc.model.MultiplyDataModel;
 
-public class MySink extends RichSinkFunction<MultiplyDataModel> implements CheckpointedFunction, CheckpointListener {
+public class MySink extends RichSinkFunction<MultiplyDataModel> implements CheckpointedFunction {
 
     private ListState<MultiplyDataModel> counterState;
     private ValueState<Integer> currentCount;
@@ -21,9 +19,7 @@ public class MySink extends RichSinkFunction<MultiplyDataModel> implements Check
 
     @Override
     public void invoke(MultiplyDataModel value, Context context) throws Exception {
-
         System.out.println("Invoke id " + value.id);
-
         if (currentCount.value() == null) {
             currentCount.update(0);
         }
@@ -32,20 +28,14 @@ public class MySink extends RichSinkFunction<MultiplyDataModel> implements Check
 
         if (currentCount.value() == 3) {
             System.out.println("MySink Invoked pack of 3");
-//            counterState.get().forEach(System.out::println);
-
             currentCount.update(0);
             counterState.clear();
         }
-
         if (value.isLast) {
-            System.out.println("MySink Invoked last pack");
-//            counterState.get().forEach(System.out::println);
-
-            currentCount.update(0);
+            System.out.println("Trigger store procedure");
             counterState.clear();
-            lastValueReceived.update(true);
-
+            currentCount.clear();
+            lastValueReceived.clear();
         }
 
     }
@@ -69,16 +59,4 @@ public class MySink extends RichSinkFunction<MultiplyDataModel> implements Check
 
     }
 
-    @Override
-    public void notifyCheckpointComplete(long l) throws Exception {
-        if (lastValueReceived.value() != null && lastValueReceived.value()) {
-            System.out.println("Trigger store procedure");
-
-            counterState.clear();
-            currentCount.clear();
-            lastValueReceived.clear();
-        }
-
-
-    }
 }

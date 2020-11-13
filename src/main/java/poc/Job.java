@@ -1,5 +1,6 @@
 package poc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -14,9 +15,11 @@ import poc.model.MultiplyDataModel;
 import poc.sources.CountSource;
 import poc.sources.DataSource;
 
+@Slf4j
 public class Job {
 
     public static void main(String[] args) throws Exception {
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         env.enableCheckpointing(5000L);
@@ -29,17 +32,16 @@ public class Job {
         KeyedStream<CountModel, Integer> countByKey =
                 countSource.keyBy((KeySelector<CountModel, Integer>) countModel -> countModel.id);
 
-        SingleOutputStreamOperator<MultiplyDataModel> countedDataModelIntegerKeyedStream = dataByKey
+        dataByKey
                 .connect(countByKey)
                 .process(new ProcessJoin())
                 .keyBy(c -> c.data.id)
                 .process(new CounterProcessFunction())
                 .keyBy(c -> c.data.id)
-                .process(new MultiplyFun());
-
-        countedDataModelIntegerKeyedStream
+                .process(new MultiplyFun())
                 .keyBy(c -> c.id)
-                .addSink(new MySink());
+                .addSink(new MySink())
+                .setParallelism(1); //TODO Consider split sink to storage and warehouse store procedure. Then setParallelism 1 only for store procedure.
 
         env.execute("Job");
     }
