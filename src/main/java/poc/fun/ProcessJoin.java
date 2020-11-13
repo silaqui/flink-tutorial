@@ -16,7 +16,7 @@ import poc.model.DataModel;
 public class ProcessJoin extends KeyedCoProcessFunction<Integer, DataModel, CountModel, CountedDataModel> {
 
     private ListState<DataModel> dataState;
-    private ValueState<CountModel> countState;
+    private ValueState<CountModel> countState; // TODO How to clean this state after job.
 
     @Override
     public void open(Configuration parameters) throws Exception {

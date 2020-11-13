@@ -10,6 +10,7 @@ import poc.fun.*;
 import poc.model.CountModel;
 import poc.model.CountedDataModel;
 import poc.model.DataModel;
+import poc.model.MultiplyDataModel;
 import poc.sources.CountSource;
 import poc.sources.DataSource;
 
@@ -28,20 +29,17 @@ public class Job {
         KeyedStream<CountModel, Integer> countByKey =
                 countSource.keyBy((KeySelector<CountModel, Integer>) countModel -> countModel.id);
 
-        KeyedStream<CountedDataModel, Integer> countedDataModelIntegerKeyedStream = dataByKey
+        SingleOutputStreamOperator<MultiplyDataModel> countedDataModelIntegerKeyedStream = dataByKey
                 .connect(countByKey)
                 .process(new ProcessJoin())
                 .keyBy(c -> c.data.id)
                 .process(new CounterProcessFunction())
                 .keyBy(c -> c.data.id)
-                .assignTimestampsAndWatermarks(new WatermarkGenerator())
-                .keyBy(c -> c.data.id);
+                .process(new MultiplyFun());
 
         countedDataModelIntegerKeyedStream
+                .keyBy(c -> c.id)
                 .addSink(new MySink());
-
-        countedDataModelIntegerKeyedStream
-                .process(new TriggeredFunction());
 
         env.execute("Job");
     }

@@ -8,25 +8,25 @@ public class DataSource implements SourceFunction<DataModel> {
     private boolean isRunning = true;
 
     public void run(SourceFunction.SourceContext<DataModel> sourceContext) throws Exception {
-        DataModel m1 = new DataModel(1, "1a");
-        DataModel m2 = new DataModel(1, "1b");
-        DataModel m3 = new DataModel(1, "1c");
-        DataModel m4 = new DataModel(1, "1d");
-        DataModel m5 = new DataModel(1, "1e");
-        DataModel m6 = new DataModel(1, "1f");
-        DataModel m7 = new DataModel(1, "1g");
-        DataModel m8 = new DataModel(1, "1h");
+        DataModel m1 = new DataModel(1, "1a", 2);
+        DataModel m2 = new DataModel(1, "1b", 2);
+        DataModel m3 = new DataModel(1, "1c", 2);
+        DataModel m4 = new DataModel(1, "1d",1);
+        DataModel m5 = new DataModel(1, "1e",1);
+        DataModel m6 = new DataModel(1, "1f",1);
+        DataModel m7 = new DataModel(1, "1g",1);
+        DataModel m8 = new DataModel(1, "1h",1);
 
-        DataModel m21 = new DataModel(2, "2a");
-        DataModel m22 = new DataModel(2, "2b");
-        DataModel m23 = new DataModel(2, "2c");
-        DataModel m24 = new DataModel(2, "2d");
-        DataModel m25 = new DataModel(2, "2e");
-        DataModel m26 = new DataModel(2, "2f");
-        DataModel m27 = new DataModel(2, "2g");
-        DataModel m28 = new DataModel(2, "2h");
-        DataModel m29 = new DataModel(2, "2i");
-        DataModel m30 = new DataModel(2, "2j");
+        DataModel m21 = new DataModel(2, "2a",2);
+        DataModel m22 = new DataModel(2, "2b",2);
+        DataModel m23 = new DataModel(2, "2c",1);
+        DataModel m24 = new DataModel(2, "2d",1);
+        DataModel m25 = new DataModel(2, "2e",1);
+        DataModel m26 = new DataModel(2, "2f",1);
+        DataModel m27 = new DataModel(2, "2g",1);
+        DataModel m28 = new DataModel(2, "2h",1);
+        DataModel m29 = new DataModel(2, "2i",1);
+        DataModel m30 = new DataModel(2, "2j",1);
 
         sourceContext.collect(m1);
         sourceContext.collect(m2);
@@ -48,7 +48,7 @@ public class DataSource implements SourceFunction<DataModel> {
         sourceContext.collect(m29);
         sourceContext.collect(m30);
 
-//        while (isRunning){ }
+        while (isRunning){ }
     }
 
     public void cancel() {

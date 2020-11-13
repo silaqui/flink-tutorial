@@ -11,7 +11,7 @@ public class  CountSource implements SourceFunction<CountModel> {
     public void run(SourceContext<CountModel> sourceContext) throws Exception {
         sourceContext.collect(new CountModel(1,8));
         sourceContext.collect(new CountModel(2,10));
-//        while (isRunning){ }
+        while (isRunning){ }
     }
 
     public void cancel() {

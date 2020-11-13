@@ -27,6 +27,7 @@ public class CounterProcessFunction extends KeyedProcessFunction<Integer, Counte
         if (counterState.value() != null && countedDataModel.count.count == counterState.value()) {
             countedDataModel.setLast(true);
             System.out.println("CounterProcessFunction " + countedDataModel);
+            counterState.clear();
         }
         collector.collect(countedDataModel);
 

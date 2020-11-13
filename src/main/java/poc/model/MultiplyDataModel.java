@@ -1,16 +1,16 @@
 package poc.model;
 
-public class DataModel {
+public class MultiplyDataModel {
 
 
     public int id;
     public String data;
-    public int multiply;
+    public Boolean isLast;
 
-    public DataModel(int id, String data, int multiply) {
+    public MultiplyDataModel(int id, String data, Boolean isLast) {
         this.id = id;
         this.data = data;
-        this.multiply = multiply;
+        this.isLast = isLast;
     }
 
     @Override
@@ -18,7 +18,6 @@ public class DataModel {
         return "DataModel{" +
                 "id=" + id +
                 ", data='" + data + '\'' +
-                ", multiply=" + multiply +
                 '}';
     }
 }
